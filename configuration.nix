@@ -11,12 +11,14 @@
     ];
 
   # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.useOSProber = true;
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;  
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "mikkel"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+  # Enable experimental features
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -50,6 +52,10 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
+  # Enable the CosmicDesktop Environment.
+  # services.desktopManager.cosmic.enable = true;
+  # services.displayManager.cosmic-greeter.enable = true;
+
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "dk";
@@ -63,7 +69,7 @@
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -105,7 +111,7 @@
 
   # Set wayland as default
   environment.sessionVariables = {
-	  NIXOS_OZONE_WL = "1";
+    # NIXOS_OZONE_WL = "1";
   };
 
   hardware = {
@@ -139,6 +145,9 @@
 
 	# tools
     gh
+    fd
+    zip
+    unzip
     wget
     git
     htop
@@ -146,7 +155,8 @@
 
   # Sway tools
     light
-    fuzzel
+    brightnessctl
+    rofi-wayland
     pamixer
     sway-contrib.grimshot
     wl-mirror
@@ -155,14 +165,36 @@
     swaylock
     swayimg
     waybar
+    autotiling
+
+  # Wallpapers
+    nixos-artwork.wallpapers.simple-dark-gray
 
 	# Programs
 	  google-chrome
+    caprine
     ghostty
-    nerdfonts
-    wofi
+    cantarell-fonts
+    font-awesome
+    discord
   ];
 
+  # Fonts
+  fonts.packages = with pkgs; [
+    nerd-fonts.fira-code
+    nerd-fonts.fira-mono
+    nerd-fonts.meslo-lg
+  ];
+
+  # Path to the desktop wallpaper
+  environment.pathsToLink = [ "/share/backgrounds/nixos" ];
+
+  # Enable garbage collection of the Nix store
+  nix.gc = {
+		automatic = true;
+		dates = "weekly";
+		options = "--delete-older-than 30d";
+	};
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
