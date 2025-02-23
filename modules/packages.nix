@@ -95,4 +95,10 @@
     discord
     spotify
   ];
+
+  # List services that you want to enable:
+  services.emacs = {
+	  enable = true;
+	  package = pkgs.emacs;
+  };
 }
