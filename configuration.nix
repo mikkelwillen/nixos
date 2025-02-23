@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./modules/packages.nix
     ];
 
   # Bootloader.
@@ -26,6 +27,11 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+
+  # Enable ld library
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+  ];
 
   # Set your time zone.
   time.timeZone = "Europe/Copenhagen";
@@ -55,6 +61,30 @@
   # Enable the CosmicDesktop Environment.
   # services.desktopManager.cosmic.enable = true;
   # services.displayManager.cosmic-greeter.enable = true;
+
+  # Virtualbox stuff
+  virtualisation.virtualbox.host.enable = true;
+  services.nfs.server.enable = true;
+
+  boot.kernelParams = [ "kvm.enable_virt_at_load=0" ];
+
+  # Add firewall exception for VirtualBox provider
+  networking.firewall.extraCommands = ''
+    ip46tables -I INPUT 1 -i vboxnet+ -p tcp -m tcp --dport 2049 -j ACCEPT
+  '';
+
+  # TLP for power management
+  services.power-profiles-daemon.enable = false;
+  services.tlp = {
+    enable = true;
+    settings = {
+      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+      CPU_ENERGY_PERF_POLICY_ON_BAT = "balanced";
+
+      #Optional helps save long term battery health
+      STOP_CHARGE_THRESH_BAT0 = 1;
+    };
+  };
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -91,93 +121,100 @@
     ];
   };
 
-  # Install firefox
-  programs.firefox.enable = true;
+  # # Install firefox
+  # programs.firefox.enable = true;
 
-  # Install fish shell
-  programs.fish.enable = true;
+  # # Install fish shell
+  # programs.fish.enable = true;
 
-  # Install hyprland
-  # programs.hyprland = {
-	#   enable = true;
-	#   xwayland.enable = true;
+  # # Install thunderbird
+  # programs.thunderbird.enable = true;
+
+  # # Install hyprland
+  # # programs.hyprland = {
+	# #   enable = true;
+	# #   xwayland.enable = true;
+  # # };
+
+  # # Install sway
+  # programs.sway = {
+  #   enable = true;
+  #   wrapperFeatures.gtk = true;
   # };
 
-  # Install sway
-  programs.sway = {
-    enable = true;
-    wrapperFeatures.gtk = true;
-  };
+  # # Set wayland as default
+  # environment.sessionVariables = {
+  #   # NIXOS_OZONE_WL = "1";
+  # };
 
-  # Set wayland as default
-  environment.sessionVariables = {
-    # NIXOS_OZONE_WL = "1";
-  };
+  # hardware = {
+	#   graphics.enable = true;
+  # };
 
-  hardware = {
-	  graphics.enable = true;
-  };
+  # # Allow unfree packages
+  # nixpkgs.config.allowUnfree = true;
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+  # # List packages installed in system profile. To search, run:
+  # # $ nix search wget
+  # environment.systemPackages = with pkgs; [
+	# # Programming languages
+  #   nodejs_22
+  #   rustc
+  #   cargo
+  #   rust-analyzer
+  #   jdk
+  #   python39
+  #   haskell.compiler.native-bignum.ghcHEAD
+  #   cabal-install
+  #   dotnetCorePackages.dotnet_9.sdk
+  #   dotnetCorePackages.dotnet_9.runtime
+  #   nixfmt-rfc-style
+  #   shellcheck
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-	# Programming languages
-    nodejs_22
-    rustc
-    cargo
-    rust-analyzer
-    jdk
-    python39
-    haskell.compiler.native-bignum.ghcHEAD
-    cabal-install
-    dotnetCorePackages.dotnet_9.sdk
-    dotnetCorePackages.dotnet_9.runtime
-    nixfmt-rfc-style
-    shellcheck
+	# # Editors
+  #   vim
+  #   emacs
+  #   # pkgs.emacsPackages.compat
 
-	# Editors
-    vim
-    emacs
-    # pkgs.emacsPackages.compat
+	# # tools
+  #   gh
+  #   fd
+  #   zip
+  #   unzip
+  #   wget
+  #   git
+  #   htop
+  #   ripgrep
+  #   bat
+  #   vagrant
+  #   gnumake
 
-	# tools
-    gh
-    fd
-    zip
-    unzip
-    wget
-    git
-    htop
-    ripgrep
+  # # Sway tools
+  #   light
+  #   brightnessctl
+  #   rofi-wayland
+  #   pamixer
+  #   sway-contrib.grimshot
+  #   wl-mirror
+  #   swaybg
+  #   swayidle
+  #   swaylock
+  #   swayimg
+  #   waybar
+  #   autotiling
 
-  # Sway tools
-    light
-    brightnessctl
-    rofi-wayland
-    pamixer
-    sway-contrib.grimshot
-    wl-mirror
-    swaybg
-    swayidle
-    swaylock
-    swayimg
-    waybar
-    autotiling
+  # # Wallpapers
+  #   nixos-artwork.wallpapers.simple-dark-gray
 
-  # Wallpapers
-    nixos-artwork.wallpapers.simple-dark-gray
-
-	# Programs
-	  google-chrome
-    caprine
-    ghostty
-    cantarell-fonts
-    font-awesome
-    discord
-  ];
+	# # Programs
+	#   google-chrome
+  #   caprine
+  #   ghostty
+  #   cantarell-fonts
+  #   font-awesome
+  #   discord
+  #   spotify
+  # ];
 
   # Fonts
   fonts.packages = with pkgs; [
@@ -214,10 +251,8 @@
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking.firewall.allowedTCPPorts = [ 57621 ];
+  networking.firewall.allowedUDPPorts = [ 5353 ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

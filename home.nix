@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -19,20 +19,22 @@
 
   xdg.desktopEntries."google-chrome" = {
     name = "Google Chrome";
-    exec = "${pkgs.google-chrome}/bin/google-chrome-stable --force-device-scale-factor=1.15 %U";
+    exec = "env XFT_DPI=106 ${pkgs.google-chrome}/bin/google-chrome-stable --force-device-scale-factor=1.1 %U";
     icon = "${pkgs.google-chrome}/share/icons/hicolor/48x48/apps/google-chrome.png";
   };
 
   # Change caprine .desktop file to increase scaling
   xdg.desktopEntries."caprine" = {
     name = "Caprine";
-    exec = "${pkgs.caprine}/bin/caprine --force-device-scale-factor=1.15 %U";
-    icon = "${pkgs.caprine}/share/icons/hicolor/256x256/apps/caprine.png";
+    exec = "env XFT_DPI=106 ${pkgs.caprine}/bin/caprine --force-device-scale-factor=1.1 %U";
+    icon = "${pkgs.caprine}/share/icons/hicolor/512x512/apps/caprine.png";
   };
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = [
+  home.packages = with pkgs; [
+    inputs.zen-browser.packages."${system}".default
+
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello

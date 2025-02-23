@@ -7,13 +7,17 @@
     nixpkgs.follows = "nixos-cosmic/nixpkgs"; # NOTE: change "nixpkgs" to "nixpkgs-stable" to use stable NixOS release
 
     nixos-cosmic.url = "github:lilyinstarlight/nixos-cosmic";
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
   };
 
-  outputs = { self, nixpkgs, home-manager, flake-utils, nixos-cosmic }: {
+  outputs = { self, nixpkgs, home-manager, flake-utils, nixos-cosmic, zen-browser } @ inputs : {
     nixosConfigurations = {
       # NOTE: change "host" to your system's hostname
       mikkel = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
         modules = [
+          ./configuration.nix
           {
             nix.settings = {
               substituters = [ "https://cosmic.cachix.org/" ];
@@ -21,14 +25,14 @@
             };
           }
           nixos-cosmic.nixosModules.default
+
           home-manager.nixosModules.home-manager
-          ./configuration.nix
+          {
+            home-manager.users.mikkel = import ./home.nix;
+            home-manager.extraSpecialArgs = { inherit inputs; system = "x86_64-linux"; };
+          }
         ];
       };
-    };
-    configurations = {
-      home-manager.users.mikkel = import ./home.nix;
-
     };
   };
 }
