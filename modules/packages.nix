@@ -68,6 +68,9 @@
     bat
     vagrant
     gnumake
+    tree
+    mendeley
+    linux-manual
 
   # Sway tools
     light

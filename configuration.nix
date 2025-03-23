@@ -60,7 +60,7 @@
   services.xserver.desktopManager.gnome.enable = true;
 
   # Enable the CosmicDesktop Environment.
-  # services.desktopManager.cosmic.enable = true;
+  services.desktopManager.cosmic.enable = true;
   # services.displayManager.cosmic-greeter.enable = true;
 
   # Virtualbox stuff
@@ -75,17 +75,17 @@
   '';
 
   # TLP for power management
-  services.power-profiles-daemon.enable = false;
-  services.tlp = {
-    enable = true;
-    settings = {
-      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
-      CPU_ENERGY_PERF_POLICY_ON_BAT = "balanced";
+  # services.power-profiles-daemon.enable = false;
+  # services.tlp = {
+  #   enable = true;
+  #   settings = {
+  #     CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+  #     CPU_ENERGY_PERF_POLICY_ON_BAT = "balanced";
 
-      #Optional helps save long term battery health
-      STOP_CHARGE_THRESH_BAT0 = 1;
-    };
-  };
+  #     #Optional helps save long term battery health
+  #     STOP_CHARGE_THRESH_BAT0 = 1;
+  #   };
+  # };
 
   # Configure keymap in X11
   services.xserver.xkb = {
