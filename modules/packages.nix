@@ -6,6 +6,7 @@
 
   # Install fish shell
   programs.fish.enable = true;
+  documentation.man.generateCaches = false;
 
   # Install thunderbird
   programs.thunderbird.enable = true;
@@ -50,6 +51,8 @@
     dotnetCorePackages.dotnet_9.runtime
     nixfmt-rfc-style
     shellcheck
+    libgcc
+    gcc14
 
 	# Editors
     vim
@@ -71,6 +74,8 @@
     tree
     mendeley
     linux-manual
+    man-pages
+    tree-sitter
 
   # Sway tools
     light
@@ -97,6 +102,12 @@
     font-awesome
     discord
     spotify
+
+  # Language servers
+    python312Packages.python-lsp-server
+    fsautocomplete
+    millet
+    asm-lsp
   ];
 
   # List services that you want to enable:
