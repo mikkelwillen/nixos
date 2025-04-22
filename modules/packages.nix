@@ -38,79 +38,87 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-	# Programming languages
-    nodejs_22
-    rustc
-    cargo
-    rust-analyzer
-    jdk
-    python39
-    haskell.compiler.native-bignum.ghcHEAD
+  # Programming languages
     cabal-install
-    dotnetCorePackages.dotnet_9.sdk
+    cargo
     dotnetCorePackages.dotnet_9.runtime
-    nixfmt-rfc-style
-    shellcheck
-    libgcc
+    dotnetCorePackages.dotnet_9.sdk
+    fsharp
     gcc14
+    haskell.compiler.ghc983
+    jdk
+    libgcc
+    nixfmt-rfc-style
+    nodejs_22
+    rust-analyzer
+    rustc
+    shellcheck
 
-	# Editors
-    vim
+  # Editors
+    eask-cli
     emacs
+    emacs-lsp-booster
+    stack
+    vim
     # pkgs.emacsPackages.compat
 
-	# tools
-    gh
-    fd
-    zip
-    unzip
-    wget
-    git
-    htop
-    ripgrep
+  # tools
     bat
-    vagrant
+    fd
+    gh
+    git
     gnumake
-    tree
-    mendeley
+    htop
     linux-manual
     man-pages
+    mendeley
+    ripgrep
+    tree
     tree-sitter
+    unzip
+    vagrant
+    wget
+    zip
 
   # Sway tools
-    light
+    autotiling
     brightnessctl
-    rofi-wayland
+    light
     pamixer
+    rofi-wayland
     sway-contrib.grimshot
-    wl-mirror
     swaybg
     swayidle
-    swaylock
     swayimg
+    swaylock
     waybar
-    autotiling
+    wl-mirror
 
   # Wallpapers
     nixos-artwork.wallpapers.simple-dark-gray
 
 	# Programs
-	  google-chrome
-    caprine
-    ghostty
     cantarell-fonts
-    font-awesome
+    caprine
+    cutter
     discord
+    font-awesome
+    ghostty
+    google-chrome
     spotify
 
   # Language servers
-    python312Packages.python-lsp-server
-    fsautocomplete
-    millet
     asm-lsp
+    millet
+    python312Packages.python-lsp-server
+    (haskell-language-server.override { supportedGhcVersions = [ "94" "983" ]; })
+
+  # Formatters
+    rustfmt
   ];
 
   # List services that you want to enable:
+  # Enables the emacs daemon
   services.emacs = {
 	  enable = true;
 	  package = pkgs.emacs;
