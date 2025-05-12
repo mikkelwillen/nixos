@@ -125,6 +125,11 @@
   # Path to the desktop wallpaper
   environment.pathsToLink = [ "/share/backgrounds/nixos" ];
 
+  # Path to the dotnet sdk
+  environment.sessionVariables = {
+    DOTNET_ROOT = "/run/current-system/sw";
+  };
+
   # Enable garbage collection of the Nix store
   nix.gc = {
 		automatic = true;

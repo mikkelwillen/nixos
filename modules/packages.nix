@@ -41,8 +41,8 @@
   # Programming languages
     cabal-install
     cargo
-    dotnetCorePackages.dotnet_9.runtime
-    dotnetCorePackages.dotnet_9.sdk
+    # dotnetCorePackages.dotnet_9.runtime
+    dotnet-sdk_9
     fsharp
     gcc14
     haskell.compiler.ghc983
@@ -53,6 +53,8 @@
     rust-analyzer
     rustc
     shellcheck
+    python312
+    python312Packages.pip
 
   # Editors
     eask-cli
@@ -60,6 +62,7 @@
     emacs-lsp-booster
     stack
     vim
+    pkgs.emacsPackages.pdf-tools
     # pkgs.emacsPackages.compat
 
   # tools
@@ -106,8 +109,10 @@
     ghostty
     google-chrome
     spotify
+    zoom-us
 
   # Language servers
+    fsautocomplete
     asm-lsp
     millet
     python312Packages.python-lsp-server

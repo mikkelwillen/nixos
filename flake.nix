@@ -11,7 +11,6 @@
 
   outputs = { self, nixpkgs, home-manager, flake-utils, nixos-cosmic, zen-browser } @ inputs : {
     nixosConfigurations = {
-      # NOTE: change "host" to your system's hostname
       mikkel = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };
@@ -23,7 +22,7 @@
               trusted-public-keys = [ "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE=" ];
             };
           }
-          nixos-cosmic.nixosModules.default
+          # nixos-cosmic.nixosModules.default
 
           home-manager.nixosModules.home-manager
           {
